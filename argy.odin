@@ -108,6 +108,24 @@ parse :: proc(descriptors: []Descriptor, arguments: []string) -> []Arg {
 	return result[:]
 }
 
+args_matched :: proc(args: []Arg, name: string) -> string {
+	for arg in args {
+		if arg.name == name {
+			return arg.matched
+		}
+	}
+	return ""
+}
+
+args_value :: proc(args: []Arg, name: string) -> Value {
+	for arg in args {
+		if arg.name == name {
+			return arg.value
+		}
+	}
+	return Value{}
+}
+
 @(private)
 parse_argument :: proc(into: ^[dynamic]Arg, descs: []Descriptor, args: []string, idx: int) -> int {
 	chomped := 1
