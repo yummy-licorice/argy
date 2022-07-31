@@ -32,6 +32,7 @@ Descriptor :: struct {
 Match_Mode :: union #no_nil {
 	string,
 	Long_Short,
+	Anything,
 }
 
 // Signifies the user can pass the argument as a long/short Linux-style alias
@@ -40,6 +41,9 @@ Long_Short :: struct {
 	long: string,
 	short: string,
 }
+
+// Signifies the user can pass anything as the argument.
+Anything :: struct{}
 
 // Location an argument can appear. The zero value signifies anywhere.
 Location :: union {
@@ -203,6 +207,7 @@ parse_argument :: proc(into: ^[dynamic]Arg, descs: []Descriptor, args: []string,
 			position = uint(idx),
 			value = value,
 		})
+		break
 	}
 
 	return chomped
@@ -213,6 +218,9 @@ name_matches :: proc(desc: Descriptor, match: Match_Mode, arg: string) -> bool {
 	matches_name := false
 	
 	switch in match {
+	
+	case Anything:
+		return true
 	
 	// Match aliased argument (-p, --plong)
 	case Long_Short:

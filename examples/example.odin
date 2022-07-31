@@ -35,6 +35,12 @@ main :: proc() {
 		{
 			name = "loudly",
 			match = {argy.Long_Short{long = "loud", short = "l"}},
+			location = argy.After{"hum"},
+		},
+		{
+			name = "hum_target",
+			match = {argy.Anything{}},
+			location = argy.After{"hum"},
 		},
 
 		// Arguments valid for `check` subcommand0
