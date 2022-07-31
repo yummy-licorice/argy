@@ -147,6 +147,7 @@ parse_argument :: proc(into: ^[dynamic]Arg, descs: []Descriptor, args: []string,
 		value: Value
 
 		matches_name := false
+		matched_any := false
 		matches_location := false
 		matches_value := false
 
@@ -157,6 +158,9 @@ parse_argument :: proc(into: ^[dynamic]Arg, descs: []Descriptor, args: []string,
 			for match in desc.match {
 				if name_matches(desc, match, next_arg) {
 					matches_name = true
+					if _, is_any := match.(Anything); is_any {
+						matched_any = true
+					}
 					break
 				}
 			}
@@ -197,7 +201,7 @@ parse_argument :: proc(into: ^[dynamic]Arg, descs: []Descriptor, args: []string,
 		if !matches_location { continue }
 
 		// Get a value for the argument if it takes one
-		if desc.value_type != nil {
+		if desc.value_type != nil && !matched_any {
 			// Arg is in match of --a=true
 			if fused_index := strings.index(next_arg, ARG_EQUALS); fused_index != -1 {
 				value = value_from_string(desc.value_type.(Value_Type), next_arg[fused_index + 1:])
@@ -212,6 +216,9 @@ parse_argument :: proc(into: ^[dynamic]Arg, descs: []Descriptor, args: []string,
 			}
 			if desc.value_required && value != nil { matches_value = true }
 		} else {
+			if matched_any {
+				value = value_from_string(desc.value_type.(Value_Type), next_arg)
+			}
 			matches_value = true
 		}
 
