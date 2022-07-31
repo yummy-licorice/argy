@@ -36,6 +36,11 @@ defer delete(args)
 fmt.println(args)
 ```
 
+## Roadmap
+
+* Error handling, invalid command detection, etc.
+* Match against more than just words or long/short combinations
+
 ## License
 
 BSD 3-clause.
