@@ -108,13 +108,13 @@ parse :: proc(descriptors: []Descriptor, arguments: []string) -> []Arg {
 	return result[:]
 }
 
-args_matched :: proc(args: []Arg, name: string) -> string {
+has :: proc(args: []Arg, name: string) -> bool {
 	for arg in args {
 		if arg.name == name {
-			return arg.matched
+			return true
 		}
 	}
-	return ""
+	return false
 }
 
 args_value :: proc(args: []Arg, name: string) -> Value {
